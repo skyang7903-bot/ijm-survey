@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f3550">
+<title>독립운동자료 통합 아카이브 플랫폼 기능 강화를 위한 설문조사</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* ==========================================================
+   디자인 설정 — 색상·글꼴·모서리는 여기 값만 바꾸면 전체에 반영됩니다
+   ========================================================== */
+:root{
+  --bg:#f4f1ea;          /* 페이지 바탕 */
+  --surface:#ffffff;     /* 카드 바탕 */
+  --ink:#1b2430;         /* 본문 글자 */
+  --muted:#5f6670;       /* 보조 글자 */
+  --line:#e2ddd2;        /* 테두리 */
+  --brand:#1f3550;       /* 상단 머리 색 */
+  --accent:#8a2f2a;      /* 선택·강조 색 */
+  --accent-soft:#f7ebe8; /* 선택된 보기 바탕 */
+  --danger:#c0392b;
+  --radius:14px;
+  --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.6;word-break:keep-all;overflow-wrap:break-word}
+button,input,textarea{font:inherit;color:inherit}
+
+/* 진행 표시줄 */
+.progress{position:sticky;top:0;z-index:20;background:rgba(244,241,234,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.progress-inner{max-width:780px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:14px;font-size:13px;color:var(--muted)}
+.bar{flex:1;height:6px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .3s ease}
+.progress b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* 머리글 */
+.hero{background:var(--brand);color:#fff;padding:44px 20px 72px}
+.hero-inner{max-width:780px;margin:0 auto}
+.eyebrow{display:inline-block;font-size:13px;letter-spacing:.04em;opacity:.8;margin-bottom:12px}
+.hero h1{font-size:clamp(22px,4.6vw,32px);line-height:1.35;margin:0 0 16px;font-weight:700;letter-spacing:-.01em}
+.hero p{margin:0;opacity:.88;font-size:15px}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.chip{font-size:13px;padding:5px 12px;border-radius:99px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18)}
+
+main{max-width:780px;margin:-44px auto 0;padding:0 16px 60px;position:relative}
+.demo{background:#fff8e1;border:1px solid #f0d98a;color:#6b5400;border-radius:10px;padding:10px 14px;font-size:14px;margin-bottom:14px}
+
+/* 파트 카드 */
+.part{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px 24px;margin-bottom:16px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.part-head{display:flex;align-items:baseline;gap:10px;padding-bottom:14px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+.part-no{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.06em;text-transform:uppercase}
+.part-title{font-size:18px;font-weight:700;margin:0}
+
+/* 문항 */
+.q{border:0;margin:0;padding:22px 0;min-width:0}
+.q+.q{border-top:1px dashed var(--line)}
+.q[hidden]{display:none}
+.q legend{padding:0;width:100%;display:block;float:left}
+.q legend+*{clear:both}
+.q-title{display:flex;gap:10px;font-weight:600;font-size:17px;line-height:1.5}
+.q-no{flex:none;color:var(--accent);font-weight:700}
+.q-hint{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0;padding:8px 0 14px;font-size:13px;color:var(--muted)}
+.tag{padding:2px 8px;border-radius:6px;background:#f1eee7;border:1px solid var(--line)}
+.tag.req{color:var(--accent);background:var(--accent-soft);border-color:#ecd3ce}
+.count{margin-left:auto;font-variant-numeric:tabular-nums}
+.count.full{color:var(--accent);font-weight:600}
+.cond{font-size:13px;color:var(--muted);margin:-8px 0 12px}
+
+/* 보기 */
+.opts{display:grid;grid-template-columns:1fr;gap:8px}
+@media (min-width:640px){.opts.two{grid-template-columns:1fr 1fr}}
+.opt{position:relative;display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;transition:border-color .15s,background .15s;min-height:48px}
+.opt:hover{border-color:#cfc8b9}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.mark{flex:none;width:20px;height:20px;margin-top:2px;border:2px solid #b9b2a3;background:#fff;display:grid;place-items:center;transition:all .15s}
+.radio .mark{border-radius:50%}
+.check .mark{border-radius:5px}
+.opt .num{color:var(--muted);margin-right:4px}
+.opt:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.opt input:checked+.mark{border-color:var(--accent);background:var(--accent)}
+.radio input:checked+.mark::after{content:"";width:8px;height:8px;border-radius:50%;background:#fff}
+.check input:checked+.mark::after{content:"";width:10px;height:6px;border:2px solid #fff;border-top:0;border-right:0;transform:translateY(-1px) rotate(-45deg)}
+.opt input:focus-visible+.mark{outline:3px solid rgba(138,47,42,.3);outline-offset:2px}
+.opt.disabled{opacity:.45;cursor:not-allowed}
+.other{margin-top:10px}
+.other[hidden]{display:none}
+
+.field{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;outline:none;transition:border-color .15s}
+.field:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(138,47,42,.12)}
+textarea.field{min-height:140px;resize:vertical;line-height:1.6}
+.len{text-align:right;font-size:12px;color:var(--muted);margin-top:4px}
+
+/* 척도(Q9) */
+.scale-item{padding:16px 0}
+.scale-item+.scale-item{border-top:1px solid #f0ece4}
+.scale-label{font-size:15px;margin-bottom:10px;display:flex;gap:8px}
+.scale-label .n{color:var(--accent);font-weight:700;flex:none}
+.scale-label strong{font-weight:600}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.scale label{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;padding:10px 4px;border:1px solid var(--line);border-radius:10px;cursor:pointer;text-align:center;font-size:12px;line-height:1.3;color:var(--muted);min-height:64px;transition:all .15s;background:#fff}
+.scale label b{font-size:16px;color:var(--ink);font-weight:700}
+.scale input{position:absolute;opacity:0;pointer-events:none}
+.scale label:has(input:checked){background:var(--accent);border-color:var(--accent);color:#fff}
+.scale label:has(input:checked) b{color:#fff}
+.scale label:has(input:focus-visible){outline:3px solid rgba(138,47,42,.3);outline-offset:2px}
+@media (max-width:420px){.scale label{font-size:11px;padding:8px 2px}}
+
+/* 오류 */
+.q.invalid .q-title{color:var(--danger)}
+.err{display:none;color:var(--danger);font-size:13px;margin-top:8px}
+.q.invalid .err{display:block}
+.scale-item.invalid .scale-label{color:var(--danger)}
+
+/* 제출 */
+.submit-wrap{text-align:center;padding:12px 0 0}
+.btn{appearance:none;border:0;border-radius:12px;background:var(--accent);color:#fff;font-weight:700;font-size:17px;padding:16px 28px;width:100%;max-width:420px;cursor:pointer;transition:filter .15s,transform .05s}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.6;cursor:wait}
+.privacy{font-size:13px;color:var(--muted);margin-top:12px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+/* 완료 화면 */
+.done{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:56px 24px;text-align:center}
+.done .icon{width:64px;height:64px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin:0 auto 18px}
+.done h2{margin:0 0 10px;font-size:22px}
+.done p{margin:0;color:var(--muted)}
+.again{margin-top:22px;background:none;border:1px solid var(--line);border-radius:10px;padding:10px 18px;cursor:pointer;color:var(--muted)}
+
+footer{text-align:center;font-size:12px;color:var(--muted);padding:0 16px 40px}
+
+@media (max-width:520px){
+  .hero{padding:32px 18px 64px}
+  .part{padding:22px 16px}
+  main{padding:0 12px 48px}
+  .q-title{font-size:16px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="progress" aria-hidden="true">
+  <div class="progress-inner">
+    <span>진행률</span>
+    <div class="bar"><i id="barFill"></i></div>
+    <b id="barText">0%</b>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow" id="eyebrow"></span>
+    <h1 id="title"></h1>
+    <p id="intro"></p>
+    <div class="meta" id="meta"></div>
+  </div>
+</header>
+
+<main>
+  <div id="demo" class="demo" hidden>미리보기 모드입니다. 응답은 저장되지 않습니다. (설정의 ENDPOINT를 입력하면 실제 저장됩니다)</div>
+  <form id="form" novalidate>
+    <div id="parts"></div>
+    <!-- 자동 입력 방지용(사람에게는 보이지 않음) -->
+    <div class="hp" aria-hidden="true"><label>website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+    <div class="submit-wrap">
+      <button type="submit" class="btn" id="submitBtn">응답 제출하기</button>
+      <p class="privacy" id="privacy"></p>
+    </div>
+  </form>
+  <section id="done" class="done" hidden>
+    <div class="icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+    <h2 id="doneTitle"></h2>
+    <p id="doneText"></p>
+    <button type="button" class="again" id="againBtn" hidden>새 응답 작성하기</button>
+  </section>
+</main>
+<footer id="footer"></footer>
+
+<script>
+/* ==========================================================
+   1) 기본 설정
+   ========================================================== */
+const SETTINGS = {
+  // Apps Script 웹 앱 배포 후 받은 주소(…/exec)를 따옴표 안에 붙여 넣으세요.
+  // 비워 두면 '미리보기 모드'로 동작하며 응답은 저장되지 않습니다.
+  ENDPOINT: 'https://script.google.com/macros/s/AKfycbwyZkMLipIItU3EyBvvO1u6aAEZwdoZWJzdm1gWadAB6nEI5AsINZOD4fUwijx9N1F4/exec',
+  // true: 같은 기기·브라우저에서 한 번만 응답 / false: 행사 현장 태블릿처럼 여러 명이 연속 응답
+  ONE_RESPONSE_PER_DEVICE: true,
+  STORAGE_KEY: 'ijm-archive-survey-2026'
+};
+
+/* ==========================================================
+   2) 설문 내용 — 문구·보기 수정은 여기서만 하면 됩니다
+      type: single(하나 선택) / multi(복수 선택, max=최대 개수)
+            scale(5점 척도) / text(주관식)
+      other: true → 그 보기를 고르면 주관식 입력칸이 열립니다
+      showIf: { id:'q4', codes:[1,2,3] } → q4에서 1~3번을 골랐을 때만 표시
+   ========================================================== */
+const SURVEY = {
+  eyebrow: '독립기념관 · 국민 의견 조사',
+  title: '독립운동자료 통합 아카이브 플랫폼 기능 강화를 위한 설문조사',
+  intro: '안녕하십니까? 본 조사는 국민 여러분께서 독립기념관이 소장하고 있는 방대한 독립운동 기록과 역사 자료를 더 쉽고 편리하게 찾고 활용하실 수 있도록, 새로운 아카이브 플랫폼에 필요한 기능에 대한 의견을 수렴하고자 마련되었습니다. 평소 독립운동 자료를 찾으면서 느끼셨던 점과 꼭 필요하다고 생각하시는 기능에 대해 소중한 의견을 들려주시기 바랍니다.',
+  meta: ['소요시간 약 2분', '총 11문항', '개인정보 미수집'],
+  privacy: '수집된 정보는 의견 분석용으로만 활용되며, 개인정보는 수집되지 않습니다.',
+  doneTitle: '응답해 주셔서 감사합니다',
+  doneText: '소중한 시간을 내어 조사에 응해 주셔서 대단히 감사합니다.',
+  footer: '독립기념관',
+  parts: [
+    { title: '응답자 기본 정보', questions: [
+      { id:'q1', no:'Q1', type:'single', cols:2, title:'귀하의 연령대는 어디에 해당하십니까?',
+        options:['만 19세 이하','20대','30대','40대','50대','60대 이상'] },
+      { id:'q2', no:'Q2', type:'single', cols:2, title:'귀하는 현재 어떤 일을 주로 하고 계십니까?',
+        options:['학생 (초·중·고, 대학생)','교사/교수/강사 (교육 분야)','역사/학술 전문 연구자/학예사','일반 직장인 / 자영업 / 주부','기타'] },
+      { id:'q3', no:'Q3', type:'multi', max:2, cols:2, title:'독립기념관에서 독립운동 관련 자료를 찾아보시는 주된 이유는 무엇입니까?',
+        options:['학업, 수행평가, 시험 및 자격증 공부','학술 연구, 논문 작성, 전문 고증 자료 수집','수업 교재나 아이들 교육용 자료 준비','집안의 독립운동가(선조) 기록 및 유공자 확인','방송, 뉴스, 기념일을 보고 생긴 역사적 호기심','기관 또는 회사 관련 업무수행'] }
+    ]},
+    { title: '자료이용 경험 및 아쉬운 점', questions: [
+      { id:'q4', no:'Q4', type:'single', cols:2, title:'독립기념관의 홈페이지에서 독립운동 자료를 찾아보신 적이 있습니까?',
+        options:['자주 이용함','가끔 필요한 때 이용함','한두 번 가봤음','한 번도 이용하지 않음'] },
+      { id:'q5_1', no:'Q5-1', type:'multi', max:2, cols:2, showIf:{id:'q4',codes:[1,2,3]},
+        cond:'Q4에서 ①~③을 선택하신 분께 드리는 질문입니다.',
+        title:'자료를 찾아보면서 가장 불편했거나 아쉬웠던 점은 무엇입니까?',
+        options:['검색이 어려움(또는 어디서 찾아야 하는지 모름)','글과 설명이 너무 어려움','스마트폰으로 보기 불편함','사진·자료 내려받기가 복잡함','내용이 흩어져 있음',{label:'기타', other:true}] },
+      { id:'q5_2', no:'Q5-2', type:'multi', max:2, cols:2, showIf:{id:'q4',codes:[4]},
+        cond:'Q4에서 ④를 선택하신 분께 드리는 질문입니다.',
+        title:'한 번도 이용하지 않았다면 이유는 무엇입니까?',
+        options:['검색하는 메뉴를 찾지 못해서','독립운동 자료를 제공하는지 알지 못해서','관심이 없어서',{label:'기타', other:true}] }
+    ]},
+    { title: '정보 검색 및 자료 이용 편의 개선 요구', questions: [
+      { id:'q6', no:'Q6', type:'multi', max:2, cols:2, title:'독립운동 자료를 더 쉽고 정확하게 찾기 위해 가장 필요한 검색 기능은 무엇입니까?',
+        options:["쉬운 일상어 검색 ('만세운동 사진', '천안 독립운동가' 등)",'비슷한 단어 자동 안내 (오타/옛 이름 자동 추천)','조건 검색 (지역, 단체, 인물, 사료 등 종류별 필터)','연관 검색어 등 부가적 검색 기능 제공','이미지(사진) 인식 기반 유사 유물 검색','복잡한 요구사항 처리가 가능한 AI 대화형 검색','지도(지역)를 중심으로 찾을 수 있는 맵핑형 검색','국내외 유관기관 소장 사료 연계 검색'] },
+      { id:'q7', no:'Q7', type:'multi', max:2, cols:2, title:'독립운동 자료(판결문, 수형기록, 신문 등)를 볼 때 어떤 도움이 가장 필요하십니까?',
+        options:['나란히 보기 (원본과 쉬운 우리말 번역문 대조 등)','다른 자료와의 관계 정보','다양한 기능을 갖춘 이미지 뷰어(확대, 축소 캡처 등)','자료 요약 기능','신체적 약자를 위한 음성낭독 기능','본문 내 고유명사(인물·사건·지명)에 대한 자료링크'] },
+      { id:'q8', no:'Q8', type:'multi', max:2, cols:2, title:'찾아낸 자료를 활용할 때 가장 필요한 기능은 무엇입니까?',
+        options:['원클릭 내려받기 (일괄 출력, 내려받기 기능 등)','자료로 이어지는 링크(URL)주소 제공','내 서재(담아두기) 보관함 및 개인용 폴더 생성 기능','SNS 및 메신저 공유 기능'] }
+    ]},
+    { title: '서비스 고도화 및 접근성', questions: [
+      { id:'q9', no:'Q9', type:'scale', title:'시스템이 새롭게 개선될 때, 다음 기능들이 귀하에게 얼마나 유용할지 골라주세요.',
+        scale:['전혀 불필요','불필요','보통','도움될 것 같다','꼭 필요하다'],
+        items:[
+          {head:'통합 검색', text:'자료, 도서, 콘텐츠, 지리정보 등 모든 정보를 하나의 플랫폼에서 검색 및 열람'},
+          {head:'관계 맵핑', text:'인물·사건·단체·시간 등의 관계 등을 시각적 요소(선과 이미지)로 표현하는 맵핑 기능'},
+          {head:'2차 창작 콘텐츠', text:'사료를 기반으로 하는 2차 창작 콘텐츠에 대한 접근기능'},
+          {head:'AI 활용', text:'AI를 활용한 손쉬운 검색 및 결과 정리'},
+          {head:'온라인 열람신청', text:'시스템을 통한 자료 열람신청 및 행정 처리'}
+        ] },
+      { id:'q10', no:'Q10', type:'multi', max:2, cols:2, title:'서비스 접근성을 높이기 위해 가장 중요한 요소는 무엇입니까?',
+        options:['주요 포털 연계를 통한 자료 활용 방안 확대','서비스 홍보콘텐츠 제작 및 홍보 시행','독립운동, 현충시설 등 관련 기관과의 서비스 연계','모바일 앱 개발을 통한 손안에 아카이브 구축','누구나 쉽게 이용할 수 있는 간편성','PC 또는 스마트폰을 통해 접속할 수 있는 앱 개발'] }
+    ]},
+    { title: '자유로운 의견', questions: [
+      { id:'q11', no:'Q11', type:'text', optional:true, maxLength:1000,
+        title:'자료이용과 관련하여 독립기념관에 바라는 점이 있다면 자유롭게 적어주십시오.',
+        placeholder:'자유롭게 적어 주세요. (선택)' }
+    ]}
+  ]
+};
+
+/* ==========================================================
+   3) 화면 구성 — 아래부터는 수정하지 않아도 됩니다
+   ========================================================== */
+const CIRCLED = ['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩'];
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const QUESTIONS = SURVEY.parts.flatMap(p => p.questions);
+
+function optionHTML(q, opt, i){
+  const o = typeof opt === 'string' ? {label:opt} : opt;
+  const code = i + 1;
+  const value = `${CIRCLED[i]} ${o.label}`;
+  const kind = q.type === 'single' ? 'radio' : 'check';
+  return `<label class="opt ${kind}">
+    <input type="${q.type === 'single' ? 'radio' : 'checkbox'}" name="${q.id}" value="${esc(value)}" data-code="${code}" ${o.other ? 'data-other="1"' : ''}>
+    <span class="mark"></span>
+    <span class="txt"><span class="num">${CIRCLED[i]}</span>${esc(o.label)}</span>
+  </label>`;
+}
+
+function questionHTML(q){
+  const req = !q.optional;
+  let hint = '';
+  if (q.type === 'single') hint = '<span class="tag">하나만 선택</span>';
+  if (q.type === 'multi') hint = `<span class="tag">최대 ${q.max}개 선택</span>`;
+  if (q.type === 'scale') hint = '<span class="tag">항목별로 하나씩 선택</span>';
+  if (q.type === 'text') hint = '<span class="tag">주관식</span>';
+  hint += req ? '<span class="tag req">필수</span>' : '<span class="tag">선택</span>';
+  if (q.type === 'multi') hint += `<span class="count" data-count="${q.id}">0 / ${q.max}</span>`;
+
+  let body = '';
+  if (q.type === 'single' || q.type === 'multi'){
+    body = `<div class="opts ${q.cols === 2 ? 'two' : ''}">${q.options.map((o,i)=>optionHTML(q,o,i)).join('')}</div>`;
+    if (q.options.some(o => o && o.other)){
+      body += `<div class="other" data-other-for="${q.id}" hidden>
+        <input class="field" type="text" name="${q.id}_etc" maxlength="300" placeholder="기타 의견을 적어 주세요">
+      </div>`;
+    }
+  } else if (q.type === 'scale'){
+    body = q.items.map((it, k) => `
+      <div class="scale-item" data-item="${q.id}_${k+1}">
+        <div class="scale-label" id="${q.id}_${k+1}_lb"><span class="n">${k+1}.</span><span><strong>${esc(it.head)}</strong> — ${esc(it.text)}</span></div>
+        <div class="scale" role="radiogroup" aria-labelledby="${q.id}_${k+1}_lb">
+          ${q.scale.map((s, j) => `<label><input type="radio" name="${q.id}_${k+1}" value="${j+1}"><b>${j+1}</b>${esc(s)}</label>`).join('')}
+        </div>
+      </div>`).join('');
+  } else if (q.type === 'text'){
+    body = `<textarea class="field" name="${q.id}" maxlength="${q.maxLength||1000}" placeholder="${esc(q.placeholder||'')}"></textarea>
+      <div class="len"><span data-len="${q.id}">0</span> / ${q.maxLength||1000}자</div>`;
+  }
+
+  return `<fieldset class="q" data-q="${q.id}" ${q.showIf ? 'hidden' : ''}>
+    <legend><span class="q-title"><span class="q-no">${esc(q.no)}.</span><span>${esc(q.title)}</span></span></legend>
+    <div class="q-hint">${hint}</div>
+    ${q.cond ? `<p class="cond">${esc(q.cond)}</p>` : ''}
+    ${body}
+    <p class="err" role="alert">${q.type === 'scale' ? '모든 항목에 답해 주세요.' : '이 문항에 답해 주세요.'}</p>
+  </fieldset>`;
+}
+
+function render(){
+  $('#eyebrow').textContent = SURVEY.eyebrow;
+  $('#title').textContent = SURVEY.title;
+  $('#intro').textContent = SURVEY.intro;
+  $('#meta').innerHTML = SURVEY.meta.map(m => `<span class="chip">${esc(m)}</span>`).join('');
+  $('#privacy').textContent = SURVEY.privacy;
+  $('#doneTitle').textContent = SURVEY.doneTitle;
+  $('#doneText').textContent = SURVEY.doneText;
+  $('#footer').textContent = SURVEY.footer;
+  $('#parts').innerHTML = SURVEY.parts.map((p, i) => `
+    <section class="part">
+      <div class="part-head"><span class="part-no">Part ${i+1}</span><h2 class="part-title">${esc(p.title)}</h2></div>
+      ${p.questions.map(questionHTML).join('')}
+    </section>`).join('');
+  if (!SETTINGS.ENDPOINT) $('#demo').hidden = false;
+}
+
+/* ==========================================================
+   4) 동작: 분기, 최대 선택 수, 진행률, 검사, 제출
+   ========================================================== */
+const form = () => $('#form');
+const qEl = id => $(`.q[data-q="${id}"]`);
+const isVisible = q => !qEl(q.id).hidden;
+
+function selectedCodes(id){
+  return $$(`input[name="${id}"]:checked`).map(i => Number(i.dataset.code));
+}
+
+function applyBranches(){
+  QUESTIONS.filter(q => q.showIf).forEach(q => {
+    const codes = selectedCodes(q.showIf.id);
+    const show = codes.some(c => q.showIf.codes.includes(c));
+    const el = qEl(q.id);
+    if (!show && !el.hidden){
+      // 숨길 때는 답을 지워 엉뚱한 값이 저장되지 않게 합니다
+      $$('input', el).forEach(i => { if (i.type === 'text') i.value = ''; else i.checked = false; });
+      el.classList.remove('invalid');
+    }
+    el.hidden = !show;
+  });
+}
+
+function applyLimits(q){
+  if (q.type !== 'multi') return;
+  const boxes = $$(`input[name="${q.id}"]`);
+  const n = boxes.filter(b => b.checked).length;
+  boxes.forEach(b => {
+    const dis = !b.checked && n >= q.max;
+    b.disabled = dis;
+    b.closest('.opt').classList.toggle('disabled', dis);
+  });
+  const c = $(`[data-count="${q.id}"]`);
+  c.textContent = `${n} / ${q.max}`;
+  c.classList.toggle('full', n >= q.max);
+  const other = $(`[data-other-for="${q.id}"]`);
+  if (other){
+    const on = boxes.some(b => b.checked && b.dataset.other);
+    other.hidden = !on;
+    if (!on) $('input', other).value = '';
+  }
+}
+
+function isAnswered(q){
+  if (q.type === 'single' || q.type === 'multi') return selectedCodes(q.id).length > 0;
+  if (q.type === 'scale') return q.items.every((_, k) => $(`input[name="${q.id}_${k+1}"]:checked`));
+  if (q.type === 'text') return $(`[name="${q.id}"]`).value.trim().length > 0;
+  return false;
+}
+
+function updateProgress(){
+  const req = QUESTIONS.filter(q => !q.optional && isVisible(q));
+  const done = req.filter(isAnswered).length;
+  const pct = req.length ? Math.round(done / req.length * 100) : 0;
+  $('#barFill').style.width = pct + '%';
+  $('#barText').textContent = pct + '%';
+}
+
+function validate(){
+  let first = null;
+  QUESTIONS.forEach(q => {
+    const el = qEl(q.id);
+    let bad = false;
+    if (isVisible(q) && !q.optional){
+      bad = !isAnswered(q);
+      if (q.type === 'scale'){
+        q.items.forEach((_, k) => {
+          const it = $(`[data-item="${q.id}_${k+1}"]`);
+          it.classList.toggle('invalid', !$(`input[name="${q.id}_${k+1}"]:checked`));
+        });
+      }
+    }
+    el.classList.toggle('invalid', bad);
+    if (bad && !first) first = el;
+  });
+  if (first){
+    first.scrollIntoView({behavior:'smooth', block:'center'});
+    return false;
+  }
+  return true;
+}
+
+function collect(){
+  const data = {};
+  QUESTIONS.forEach(q => {
+    const visible = isVisible(q);
+    if (q.type === 'single') data[q.id] = visible ? ($(`input[name="${q.id}"]:checked`)?.value || '') : '';
+    if (q.type === 'multi'){
+      data[q.id] = visible ? $$(`input[name="${q.id}"]:checked`).map(i => i.value) : [];
+      const etc = $(`[name="${q.id}_etc"]`);
+      if (etc) data[q.id + '_etc'] = visible ? etc.value.trim() : '';
+    }
+    if (q.type === 'scale') q.items.forEach((_, k) => {
+      data[`${q.id}_${k+1}`] = Number($(`input[name="${q.id}_${k+1}"]:checked`)?.value || 0) || '';
+    });
+    if (q.type === 'text') data[q.id] = $(`[name="${q.id}"]`).value.trim();
+  });
+  const params = new URLSearchParams(location.search);
+  data.source = (params.get('src') || '직접접속').slice(0, 40);
+  data.device = matchMedia('(max-width: 768px)').matches ? '모바일' : 'PC';
+  data.responseId = Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+  data.website = $('[name="website"]').value; // 자동 입력 방지
+  return data;
+}
+
+function storage(action, value){
+  try {
+    if (action === 'get') return localStorage.getItem(SETTINGS.STORAGE_KEY);
+    if (action === 'set') localStorage.setItem(SETTINGS.STORAGE_KEY, value);
+    if (action === 'del') localStorage.removeItem(SETTINGS.STORAGE_KEY);
+  } catch(e){ return null; }
+}
+
+function showDone(already){
+  form().hidden = true;
+  $('#demo').hidden = true;
+  $('#done').hidden = false;
+  if (already){
+    $('#doneTitle').textContent = '이미 응답해 주셨습니다';
+    $('#doneText').textContent = '이 기기에서는 이미 설문에 참여하셨습니다. 참여해 주셔서 감사합니다.';
+  }
+  $('#againBtn').hidden = SETTINGS.ONE_RESPONSE_PER_DEVICE;
+  $('#barFill').style.width = '100%';
+  $('#barText').textContent = '100%';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+async function submit(e){
+  e.preventDefault();
+  if (!validate()) return;
+  const btn = $('#submitBtn');
+  btn.disabled = true;
+  btn.textContent = '제출하는 중…';
+  const data = collect();
+  try {
+    if (SETTINGS.ENDPOINT){
+      const res = await fetch(SETTINGS.ENDPOINT, { method:'POST', body: JSON.stringify(data) });
+      const out = await res.json();
+      if (!out.ok) throw new Error(out.error || '저장 실패');
+    } else {
+      console.log('[미리보기] 전송될 응답:', data);
+      await new Promise(r => setTimeout(r, 500));
+    }
+    if (SETTINGS.ONE_RESPONSE_PER_DEVICE && SETTINGS.ENDPOINT) storage('set', new Date().toISOString());
+    showDone(false);
+  } catch(err){
+    console.error(err);
+    alert('제출 중 문제가 생겼습니다. 인터넷 연결을 확인하신 뒤 다시 한 번 눌러 주세요.');
+    btn.disabled = false;
+    btn.textContent = '응답 제출하기';
+  }
+}
+
+function init(){
+  render();
+  if (SETTINGS.ONE_RESPONSE_PER_DEVICE && SETTINGS.ENDPOINT && storage('get')) { showDone(true); return; }
+  form().addEventListener('change', e => {
+    const name = e.target.name;
+    const q = QUESTIONS.find(x => x.id === name || name.startsWith(x.id + '_'));
+    if (q){
+      applyLimits(q);
+      const el = qEl(q.id);
+      if (el.classList.contains('invalid') && isAnswered(q)) el.classList.remove('invalid');
+      const it = e.target.closest('.scale-item');
+      if (it) it.classList.remove('invalid');
+    }
+    applyBranches();
+    updateProgress();
+  });
+  form().addEventListener('input', e => {
+    const lenEl = $(`[data-len="${e.target.name}"]`);
+    if (lenEl) lenEl.textContent = e.target.value.length;
+    updateProgress();
+  });
+  form().addEventListener('submit', submit);
+  $('#againBtn').addEventListener('click', () => location.reload());
+  updateProgress();
+}
+init();
+</script>
+</body>
+</html>
